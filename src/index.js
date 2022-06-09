@@ -1,26 +1,53 @@
-import { createUser, signUser } from './service';
+import { createUser, signUser, exitUser } from './service';
 
-const registration = document.querySelector('#registration');
-const authorization = document.querySelector('#authorization');
-// console.log(registration);
+const form = document.querySelector('#registration');
+const registrBtn = document.querySelector('.btn-registr');
+const authorBtn = document.querySelector('.btn-author');
+const exitBtn = document.querySelector('.btn-exit');
+const formBtn = form.querySelector('button');
+const formTitle = form.querySelector('h2');
 
-registration.addEventListener('submit', onSubmitRegistration)
-authorization.addEventListener('submit',onSubmitAuthorization)
+const elements = [form, registrBtn, authorBtn];
+const elementsExit = [exitBtn];
 
-function onSubmitRegistration(e) {
-    e.preventDefault();
-    const { email, password } = e.currentTarget.elements;
+let typeForm = 'registration';
 
-    console.log(email.value, password.value);
-    createUser(email.value, password.value);
+form.addEventListener('submit', onSubmitForm);
+exitBtn.addEventListener('click', exitUser);
+authorBtn.addEventListener('click', () => {
+  typeForm = 'authorization';
+  updateForm();
+});
+registrBtn.addEventListener('click', () => {
+  typeForm = 'registration';
+  updateForm();
+});
+
+updateForm();
+
+function updateForm() {
+  const title = typeForm === 'authorization' ? 'Авторизація' : 'Реєстрація';
+  const text =
+    typeForm === 'authorization' ? 'Авторизуватися' : 'Зареєструватися';
+  formBtn.textContent = text;
+  formTitle.textContent = title;
 }
 
-function onSubmitAuthorization(e) {
-    e.preventDefault();
-    const { email, password } = e.currentTarget.elements;
+function onSubmitForm(e) {
+  e.preventDefault();
 
-    console.log(email.value, password.value);
+  const { email, password } = e.currentTarget.elements;
+
+  console.log(email.value, password.value);
+  if (typeForm === 'authorization') {
     signUser(email.value, password.value);
+  } else {
+    createUser(email.value, password.value);
+  }
 }
 
-// console.log(registration.value);
+function classToggleElements(classElem, method, elements) {
+  elements.forEach(element => element.classList[method](classElem));
+}
+
+export { classToggleElements, elements, elementsExit };
