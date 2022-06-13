@@ -1,0 +1,46 @@
+.input-file{
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: -1px;
+}
+
+.chat-window{
+    min-height: 400px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background-color: rgb(177, 244, 222);
+    padding: 10px;
+
+    .message{
+        padding: 5px;
+        border-radius: 15px;
+        background-color: white;
+        max-width: 40%;
+        margin-bottom: 10px;
+        
+
+        &.right{
+            margin-left: auto;
+            background-color: rgb(233, 227, 227);
+           
+        }
+        p{
+            margin-bottom: 5px;
+        }
+        
+    }
+    
+}
+.input-btn {
+    border: 1px solid #ccc;
+}
+.form-control-label{
+    flex-grow: 3;
+}
+.form{
+    
+    width: 100%;
+}
+

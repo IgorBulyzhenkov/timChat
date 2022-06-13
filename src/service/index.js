@@ -5,12 +5,17 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+
 } from 'firebase/auth';
+import { getDatabase, ref, push } from "firebase/database";
 import { firebaseConfig } from '../settings/firebaseConfigFile';
-import { classToggleElements, elements, elementsExit } from '../index';
+import { classToggleElements, elements, elementsExit, getUserId } from '../index';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+
+const db = getDatabase();
+
 
 function createUser(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
@@ -47,14 +52,18 @@ onAuthStateChanged(auth, user => {
     console.log(user);
     classToggleElements('d-none', 'add', elements);
     classToggleElements('d-none', 'remove', elementsExit);
+    
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
+    getUserId(uid)
+
     // ...
   } else {
     console.log(null);
     classToggleElements('d-none', 'remove', elements);
     classToggleElements('d-none', 'add', elementsExit);
+    getUserId(null)
     // User is signed out
     // ...
   }
@@ -70,4 +79,11 @@ function exitUser() {
     });
 }
 
-export { createUser, signUser, exitUser };
+function sendMessage(message) {
+  console.log(message)
+  push(ref(db, 'messages'), message);
+}
+
+
+
+export { createUser, signUser, exitUser, sendMessage };
