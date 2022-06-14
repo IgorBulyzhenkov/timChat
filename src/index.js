@@ -6,15 +6,15 @@ const authorBtn = document.querySelector('.btn-author');
 const exitBtn = document.querySelector('.btn-exit');
 const formBtn = form.querySelector('button');
 const formTitle = form.querySelector('h2');
-const chatSection = document.querySelector('.chat-section')
-const chatForm = document.querySelector('.chat-form')
+const chatSection = document.querySelector('.chat-section');
+const chatForm = document.querySelector('.chat-form');
+const chatWindow = document.querySelector('.chat-window');
 
 const elements = [form, registrBtn, authorBtn];
 const elementsExit = [exitBtn, chatSection];
 
 let typeForm = 'registration';
 let userId = null;
-
 
 chatForm.addEventListener('submit', getMessage);
 form.addEventListener('submit', onSubmitForm);
@@ -50,7 +50,7 @@ function onSubmitForm(e) {
   } else {
     createUser(email.value, password.value);
   }
-  e.target.reset()
+  e.target.reset();
 }
 
 function classToggleElements(classElem, method, elements) {
@@ -59,31 +59,33 @@ function classToggleElements(classElem, method, elements) {
 
 function getMessage(e) {
   e.preventDefault();
-  const message = e.target.elements.message.value.trim()
+  const message = e.target.elements.message.value.trim();
   if (!message) {
-    return
+    return;
   }
-  const data = createData(message)
-  sendMessage(data) 
-  e.target.reset()
+  const data = createData(message);
+  sendMessage(data);
+  e.target.reset();
 }
 
 function createData(message) {
   return {
     message,
     id: userId,
-    time: getTime()
-  }
+    time: getTime(),
+  };
 }
 function getUserId(id) {
   userId = id;
 }
 
-function getTime(){
+function getTime() {
   const date = new Date();
-  return `${date.getHours()}:${date.getMinutes()}`
+  return `${date.getHours()}:${date.getMinutes()}`;
 }
 
+function drowMarkup(markup) {
+  chatWindow.innerHTML = markup;
+}
 
-
-export { classToggleElements, elements, elementsExit, getUserId };
+export { classToggleElements, elements, elementsExit, getUserId, drowMarkup };

@@ -5,17 +5,23 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-
 } from 'firebase/auth';
-import { getDatabase, ref, push } from "firebase/database";
+import { getDatabase, ref, push, onValue } from 'firebase/database';
 import { firebaseConfig } from '../settings/firebaseConfigFile';
-import { classToggleElements, elements, elementsExit, getUserId } from '../index';
+import {
+  classToggleElements,
+  elements,
+  elementsExit,
+  getUserId,
+  drowMarkup,
+} from '../index';
+import { createMarkup } from '../template/markup';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 const db = getDatabase();
-
+let userId = null;
 
 function createUser(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
@@ -52,18 +58,19 @@ onAuthStateChanged(auth, user => {
     console.log(user);
     classToggleElements('d-none', 'add', elements);
     classToggleElements('d-none', 'remove', elementsExit);
-    
+
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    getUserId(uid)
+    userId = user.uid;
+    getUserId(userId);
 
     // ...
   } else {
     console.log(null);
     classToggleElements('d-none', 'remove', elements);
     classToggleElements('d-none', 'add', elementsExit);
-    getUserId(null)
+    getUserId(null);
+    userId = null;
     // User is signed out
     // ...
   }
@@ -80,10 +87,19 @@ function exitUser() {
 }
 
 function sendMessage(message) {
-  console.log(message)
+  console.log(message);
   push(ref(db, 'messages'), message);
 }
 
-
+const starCountRef = ref(db, 'messages');
+onValue(starCountRef, snapshot => {
+  const data = snapshot.val();
+  if (!userId || !data) {
+    return;
+  }
+  const dataArr = Object.values(data);
+  const markup = createMarkup(dataArr, userId);
+  drowMarkup(markup);
+});
 
 export { createUser, signUser, exitUser, sendMessage };
