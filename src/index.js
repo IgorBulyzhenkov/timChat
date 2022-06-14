@@ -1,4 +1,10 @@
-import { createUser, signUser, exitUser, sendMessage } from './service';
+import {
+  createUser,
+  signUser,
+  exitUser,
+  sendMessage,
+  sevFirebaseFile,
+} from './service';
 
 const form = document.querySelector('#registration');
 const registrBtn = document.querySelector('.btn-registr');
@@ -9,7 +15,9 @@ const formTitle = form.querySelector('h2');
 const chatSection = document.querySelector('.chat-section');
 const chatForm = document.querySelector('.chat-form');
 const chatWindow = document.querySelector('.chat-window');
+const inputEl = document.querySelector('#file');
 
+console.log(inputEl);
 const elements = [form, registrBtn, authorBtn];
 const elementsExit = [exitBtn, chatSection];
 
@@ -19,6 +27,7 @@ let userId = null;
 chatForm.addEventListener('submit', getMessage);
 form.addEventListener('submit', onSubmitForm);
 exitBtn.addEventListener('click', exitUser);
+inputEl.addEventListener('change', onCheckedFile);
 
 authorBtn.addEventListener('click', () => {
   typeForm = 'authorization';
@@ -30,6 +39,12 @@ registrBtn.addEventListener('click', () => {
 });
 
 updateForm();
+
+function onCheckedFile(e) {//TODO
+  const file = e.target.files[0];
+  console.log(file);
+  sevFirebaseFile(file);
+}
 
 function updateForm() {
   const title = typeForm === 'authorization' ? 'Авторизація' : 'Реєстрація';
@@ -85,7 +100,7 @@ function getTime() {
 }
 
 function drowMarkup(markup) {
-  chatWindow.innerHTML = markup;
+  // chatWindow.innerHTML = markup;
 }
 
 export { classToggleElements, elements, elementsExit, getUserId, drowMarkup };
