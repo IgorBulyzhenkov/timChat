@@ -2,9 +2,9 @@ import {
   createUser,
   signUser,
   exitUser,
-  sendMessage,
-  sevFirebaseFile,
+  sendMessage
 } from './service';
+import { sevFirebaseFile } from './service/storage';
 
 const form = document.querySelector('#registration');
 const registrBtn = document.querySelector('.btn-registr');
