@@ -16,6 +16,7 @@ const chatSection = document.querySelector('.chat-section');
 const chatForm = document.querySelector('.chat-form');
 const chatWindow = document.querySelector('.chat-window');
 const inputEl = document.querySelector('#file');
+const priviesBox = document.querySelector('.privies-box')
 
 console.log(inputEl);
 const elements = [form, registrBtn, authorBtn];
@@ -23,6 +24,7 @@ const elementsExit = [exitBtn, chatSection];
 
 let typeForm = 'registration';
 let userId = null;
+let pictureUrl = '';
 
 chatForm.addEventListener('submit', getMessage);
 form.addEventListener('submit', onSubmitForm);
@@ -75,19 +77,29 @@ function classToggleElements(classElem, method, elements) {
 function getMessage(e) {
   e.preventDefault();
   const message = e.target.elements.message.value.trim();
-  if (!message) {
-    return;
+  
+  if (message) {
+    const data = createData(message);
+    sendMessage(data);
+    e.target.reset();
   }
-  const data = createData(message);
-  sendMessage(data);
-  e.target.reset();
+  if (pictureUrl) {
+    const data = createData('','img',pictureUrl);
+    sendMessage(data);
+    pictureUrl = '';
+    priviesBoxToggle()
+  }
+
+ 
 }
 
-function createData(message) {
+function createData(message, type='message',imgUrl='') {
   return {
     message,
     id: userId,
     time: getTime(),
+    type,
+    imgUrl,
   };
 }
 function getUserId(id) {
@@ -100,8 +112,14 @@ function getTime() {
 }
 
 function drowMarkup(markup) {
-  // chatWindow.innerHTML = markup;
+  chatWindow.innerHTML = markup;
+}
+
+function priviesBoxToggle(url=null) {
+  priviesBox.classList.toggle('is-hidden')
+  priviesBox.querySelector('img').src = url;
+  pictureUrl = url;
 }
 
 
-export { classToggleElements, elements, elementsExit, getUserId, drowMarkup };
+export { classToggleElements, elements, elementsExit, getUserId, drowMarkup, priviesBoxToggle };

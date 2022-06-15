@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../settings/firebaseConfigFile';
+import {priviesBoxToggle} from '../'
 
 import {
   getStorage,
@@ -53,7 +54,7 @@ export function sevFirebaseFile(file) {
     () => {
       // Upload completed successfully, now we can get the download URL
       getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-        console.log('File available at', downloadURL);
+        priviesBoxToggle(downloadURL)
       });
     }
   );
